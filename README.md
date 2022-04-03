@@ -4,7 +4,7 @@
 vue项目实战--尚硅谷
 
 #### 软件架构
-软件架构说明
+vue  webpack axios less scss node 等等
 
 
 #### 安装教程
