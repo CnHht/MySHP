@@ -54,7 +54,8 @@ export default {
         query:{
           keyword:this.keyword
         }
-      })
+      },
+      )
     }
 
   },
