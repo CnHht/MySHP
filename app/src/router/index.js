@@ -11,19 +11,25 @@ export default new VueRouter({
     routes:[
         {
             path:'/home',
-            component:Home
+            component:Home,
+            meta:{isShowFooter:true},
         },
         {
             path:'/login',
-            component:Login
+            component:Login,
+            meta:{isShowFooter:false},
         },
         {
-            path:'/search',
-            component:Search
+            name:'search',
+            //指定params参数可以传递或者不传递
+            path:'/search/:keyword?',
+            component:Search,
+            meta:{isShowFooter:true},
         },
         {
             path:'/register',
-            component:Register
+            component:Register,
+            meta:{isShowFooter:false},
         },
         //路由重定向，项目启动时的页面的默认页面
         {

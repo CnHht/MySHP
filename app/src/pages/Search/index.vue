@@ -1,5 +1,8 @@
 <template>
-  <div>这是Search组件</div>
+  <div>
+    <h1>{{$route.query.keyword}}</h1>
+    <h1>{{$route.params.keyword}}</h1>
+  </div>
 </template>
 
 <script>

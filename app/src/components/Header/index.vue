@@ -32,7 +32,7 @@
       </h1>
       <div class="searchArea">
         <form action="###" class="searchForm">
-          <input type="text" id="autocomplete" class="input-error input-xxlarge" />
+          <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
         </form>
       </div>
@@ -46,9 +46,22 @@ export default {
   methods:{
     //点击搜索按钮时回调函数
     goSearch(){
-      this.$router.push('/search')
+      this.$router.push({
+        name:"search",
+        params:{
+          keyword:"" || undefined
+        },
+        query:{
+          keyword:this.keyword
+        }
+      })
     }
 
+  },
+  data(){
+    return{
+      keyword:'',
+    }
   }
 
 }
