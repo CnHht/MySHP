@@ -139,7 +139,7 @@ export default {
           width: 490px;
           height: 32px;
           padding: 0px 4px;
-          border: 2px solid skyblue;
+          border: 2px solid #ea4a36;
           float: left;
 
           &:focus {
@@ -150,7 +150,7 @@ export default {
         button {
           height: 32px;
           width: 68px;
-          background-color: skyblue;
+          background-color: #ea4a36;
           border: none;
           color: #fff;
           float: left;
