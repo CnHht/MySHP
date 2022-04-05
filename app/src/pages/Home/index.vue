@@ -13,6 +13,7 @@
     <!--  楼层喜欢组件-->
     <Floor></Floor>
     <Floor></Floor>
+    <Floor></Floor>
     <!--  商标喜欢组件-->
     <Brand></Brand>
   </div>
