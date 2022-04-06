@@ -2,6 +2,7 @@
 
 import {reqCategoryList} from "@/api";
 //state 存储数据的地方
+
 const state = {
     categoryList:[],
 };
@@ -10,7 +11,7 @@ const state = {
 const mutations = {
     CATEGORYLIST(state,value){
         state.categoryList = value
-    }
+    },
 };
 
 //action 处理action
@@ -29,7 +30,8 @@ const actions = {
 };
 
 //getters :理解为vuex的计算属性
-const getters = {};
+const getters = {
+};
 
 export default {
     state,

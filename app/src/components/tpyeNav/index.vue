@@ -1,13 +1,15 @@
+<!--suppress JSUnresolvedVariable -->
 <template>
   <div class="type-nav">
     <div class="container">
       <div @mouseleave="ChangeCurr">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
-          <div class="all-sort-list2">
+          <!--    三级联动模块      -->
+          <div class="all-sort-list2" @click="GoSearch">
             <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="ChangeIndex(index)" :class="{curr:currentIndex===index}" >
               <h3 >
-                <a href="">{{c1.categoryName}}</a>
+                <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryName">{{c1.categoryName}}</a>
               </h3>
               <!--二三级分类-->
               <!--   通过js完成二三级分类显示隐藏  -->
@@ -15,11 +17,12 @@
                 <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
                   <dl class="fore">
                     <dt>
-                      <a href="">{{c2.categoryName}}</a>
+                      <!--    路由实现页面跳转使用编程式导航而不使用声明式导航是因为声明式导航是使用到了虚拟dom，由于三级联动标签很多，非常消耗内存   -->
+                      <a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryName">{{c2.categoryName}}</a>
                     </dt>
                     <dd >
                       <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{c3.categoryName}}</a>
+                        <a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryName" >{{c3.categoryName}}</a>
                       </em>
                     </dd>
                   </dl>
@@ -38,7 +41,8 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState} from 'vuex';
+import throttle from 'lodash/throttle';
 export default {
   name: "typeNav",
   data(){
@@ -56,20 +60,34 @@ export default {
     this.$store.dispatch('categoryList')
   },
   methods:{
-    //鼠标悬停时 currentIndex ==
-    ChangeIndex(index){
-      this.currentIndex = index
-      //解决卡顿现象（防抖和节流），现象：鼠标快速划过一级分类列表，浏览器没有识别到部分一级分类列表
+    //解决卡顿现象（防抖和节流），现象：鼠标快速划过一级分类列表，浏览器没有识别到部分一级分类列表
+    //鼠标悬停时 currentIndex == index
+    ChangeIndex:throttle(function (index) {
+        this.currentIndex = index
 
-    },
+    },50),
     //鼠标移出 currentIndex=-1 :class值为false， less中.curr{}不生效
     ChangeCurr(){
       this.currentIndex = -1
     },
-    ChangeNavIndex(index){
-      this.NavIndex = index
-    }
+    GoSearch(event){
+      let {categoryname,category1id,category2id,category3id} = event.target.dataset
+      let query = {categoryName:categoryname}
+      if(categoryname){
+          if(category1id){
+            query.category1Id = category1id
+          }else if (category2id){
+            query.category2Id = category2id
+          }else {
+            query.category3Id = category3id
+          }
+          this.$router.push({
+            name:'search',
+            query:query
+          })
+      }
 
+    }
 
   },
   //接收store中的数据
