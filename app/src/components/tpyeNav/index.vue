@@ -1,40 +1,38 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
-      <nav class="nav">
-        <a href="###">服装城</a>
-        <a href="###">美妆馆</a>
-        <a href="###">尚品汇超市</a>
-        <a href="###">全球购</a>
-        <a href="###">闪购</a>
-        <a href="###">团购</a>
-        <a href="###">有趣</a>
-        <a href="###">秒杀</a>
-      </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId">
-            <h3>
-              <a href="">{{c1.categoryName}}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
-                <dl class="fore">
-                  <dt>
-                    <a href="">{{c2.categoryName}}</a>
-                  </dt>
-                  <dd >
-                    <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                      <a href="">{{c3.categoryName}}</a>
-                    </em>
-                  </dd>
-                </dl>
+      <div @mouseleave="ChangeCurr">
+        <h2 class="all">全部商品分类</h2>
+        <div class="sort">
+          <div class="all-sort-list2">
+            <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="ChangeIndex(index)" :class="{curr:currentIndex===index}" >
+              <h3 >
+                <a href="">{{c1.categoryName}}</a>
+              </h3>
+              <!--二三级分类-->
+              <!--   通过js完成二三级分类显示隐藏  -->
+              <div class="item-list clearfix" :style="{display:currentIndex===index?'block':'none'}">
+                <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
+                  <dl class="fore">
+                    <dt>
+                      <a href="">{{c2.categoryName}}</a>
+                    </dt>
+                    <dd >
+                      <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
+                        <a href="">{{c3.categoryName}}</a>
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <nav class="nav">
+<!--        <a href="###" v-for="(item,index) in NavItem" @mouseenter="ChangeNavIndex(index)" :style="{background:NavIndex===index?'lightskyblue':''}" >{{item}}</a>-->
+        <a href="###" v-for="(item,index) in NavItem">{{item}}</a>
+      </nav>
     </div>
   </div>
 </template>
@@ -43,10 +41,36 @@
 import {mapState} from 'vuex'
 export default {
   name: "typeNav",
+  data(){
+    return{
+      //存储用户鼠标悬停的一级分类
+      currentIndex:-1,
+      NavItem:['服装城','美妆馆','尚品汇超市','全球购','闪购','团购','有趣','秒杀',],
+      NavIndex:-1,
+    }
+
+  },
   //当组件挂载完毕，向服务器发请求，请求数据
   mounted() {
     //通知vuex发请求，获取数据到store下的home仓库中
     this.$store.dispatch('categoryList')
+  },
+  methods:{
+    //鼠标悬停时 currentIndex ==
+    ChangeIndex(index){
+      this.currentIndex = index
+      //解决卡顿现象（防抖和节流），现象：鼠标快速划过一级分类列表，浏览器没有识别到部分一级分类列表
+
+    },
+    //鼠标移出 currentIndex=-1 :class值为false， less中.curr{}不生效
+    ChangeCurr(){
+      this.currentIndex = -1
+    },
+    ChangeNavIndex(index){
+      this.NavIndex = index
+    }
+
+
   },
   //接收store中的数据
   computed:{
@@ -55,13 +79,13 @@ export default {
         return state.home.categoryList
       }
     })
-  }
+  },
 }
 </script>
 
 <style lang="less" scoped>
 .type-nav {
-  border-bottom: 2px solid #e1251b;
+  border-bottom: 2px solid lightskyblue;
 
   .container {
     width: 1200px;
@@ -72,7 +96,7 @@ export default {
     .all {
       width: 210px;
       height: 45px;
-      background-color: #e1251b;
+      background-color: lightskyblue;
       line-height: 45px;
       text-align: center;
       color: #fff;
@@ -90,6 +114,7 @@ export default {
       }
     }
 
+
     .sort {
       position: absolute;
       left: 0;
@@ -101,7 +126,7 @@ export default {
       z-index: 999;
 
       .all-sort-list2 {
-        .item {
+        .item{
           h3 {
             line-height: 30px;
             font-size: 14px;
@@ -114,7 +139,6 @@ export default {
               color: #333;
             }
           }
-
           .item-list {
             display: none;
             position: absolute;
@@ -168,13 +192,11 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
         }
+        .curr{
+          background:lightskyblue;
+        }
+
       }
     }
   }
