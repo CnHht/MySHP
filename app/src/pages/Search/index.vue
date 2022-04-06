@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h1>{{$route.query.keyword}}</h1>
-    <h1>{{$route.params.keyword}}</h1>
+      <type-nav></type-nav>
   </div>
 </template>
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  data(){
+    return{
+
+    }
+  }
 }
 </script>
 
