@@ -5,11 +5,11 @@
       <!--   ChangeCurr方法是鼠标离开时current=-1,show=false   -->
       <div @mouseleave="ChangeCurr" @mouseenter="isShow">
         <h2 class="all">全部商品分类</h2>
+        <!--  继承第三方css过渡动画      -->
         <transition
-            appear
-            name="animate__animated"
-            leave-active-class="animate__backOutDown"
-            enter-active-class="animate__backInDown"
+            name="animate__animated animate__bounce animate__faster"
+            enter-active-class="animate__fadeInDown"
+            leave-active-class="animate__fadeOutDown"
         >
           <div class="sort" v-show="show">
             <!--    三级联动模块      -->
@@ -55,7 +55,6 @@
 import {mapState} from 'vuex';
 import throttle from 'lodash/throttle';
 import 'animate.css'
-
 export default {
   name: "typeNav",
   data() {
@@ -71,7 +70,7 @@ export default {
   //当组件挂载完毕，向服务器发请求，请求数据
   mounted() {
     //通知vuex发请求，获取数据到store下的home仓库中
-    this.$store.dispatch('categoryList')
+
     //如果页面不是home，三级联动标签不显示，show置为false
     if (this.$route.path !== '/home') {
       this.show = false
@@ -95,6 +94,7 @@ export default {
     GoSearch(event) {
       let {categoryname, category1id, category2id, category3id} = event.target.dataset
       let query = {categoryName: categoryname}
+      let location = {name:'search'}
       if (categoryname) {
         if (category1id) {
           query.category1Id = category1id
@@ -103,10 +103,12 @@ export default {
         } else {
           query.category3Id = category3id
         }
-        this.$router.push({
-          name: 'search',
-          query: query
-        })
+        //如果params参数有，必须在路由跳转前传递过去
+        if(this.$route.params){
+          location.params = this.$route.params
+          location.query = query
+          this.$router.push(location)
+        }
       }
 
     },
@@ -246,6 +248,15 @@ export default {
 
       }
     }
+    //.sort-enter{
+    //  height: 0px;
+    //}
+    //.sort-enter-to{
+    //  height: 461px;
+    //}
+    //.sort-enter-active{
+    //  transition: all .5s linear;
+    //}
   }
 }
 </style>

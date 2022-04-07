@@ -46,16 +46,12 @@ export default {
   methods:{
     //点击搜索按钮时回调函数
     goSearch(){
-      this.$router.push({
-        name:"search",
-        params:{
-          keyword:"" || undefined
-        },
-        query:{
-          keyword:this.keyword
-        }
-      },
-      )
+      let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+      };
+      location.query = this.$route.query;
+      this.$router.push(location);
     }
 
   },
