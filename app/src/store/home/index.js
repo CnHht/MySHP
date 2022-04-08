@@ -2,9 +2,11 @@
 
 import {reqCategoryList} from "@/api";
 //state 存储数据的地方
+import {reqGetBannerList} from "@/api";
 
 const state = {
     categoryList:[],
+    bannerList:[],
 };
 
 //mutations 修改state的唯一手段
@@ -12,6 +14,9 @@ const mutations = {
     CATEGORYLIST(state,value){
         state.categoryList = value
     },
+    GETBANNERLIST(state,value){
+        state.bannerList = value
+    }
 };
 
 //action 处理action
@@ -25,8 +30,16 @@ const actions = {
         }else {
             alert('三级联动数据请求失败！')
         }
+    },
+    //获取首页轮播图的数据
+    async getBannerList(context){
+        let result = await reqGetBannerList()
+        if(result.code === 200){
+            context.commit("GETBANNERLIST",result.data)
+        }else {
+            alert('三级联动数据请求失败！')
+        }
     }
-
 };
 
 //getters :理解为vuex的计算属性

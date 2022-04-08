@@ -10,6 +10,10 @@ Vue.component(typeNav.name,typeNav)
 // reqCategoryList()
 //注册vuex仓库
 import store from '@/store'
+//执行mockjs
+
+import '../src/mock/mockServe'
+
 new Vue({
   render: h => h(App),
   //注册路由组件
