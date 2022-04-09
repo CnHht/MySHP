@@ -2,9 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 Vue.config.productionTip = false
 import router from '../src/router'
-//注册三级联动组件（全局组件）
+//注册全局组件三级联动组件（全局组件）
 import typeNav from '../src/components/tpyeNav'
 Vue.component(typeNav.name,typeNav)
+//注册全局组件轮播图carousel
+import Carousel from '../src/components/Carousel'
+Vue.component(Carousel.name,Carousel)
 //测试axios请求api
 // import {reqCategoryList} from "@/api";
 // reqCategoryList()
