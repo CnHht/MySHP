@@ -4,9 +4,12 @@ import {reqCategoryList} from "@/api";
 //state 存储数据的地方
 import {reqGetBannerList} from "@/api";
 
+import {reqFloorList} from "@/api";
+
 const state = {
     categoryList:[],
     bannerList:[],
+    floorList:[]
 };
 
 //mutations 修改state的唯一手段
@@ -16,6 +19,9 @@ const mutations = {
     },
     GETBANNERLIST(state,value){
         state.bannerList = value
+    },
+    GETFLOORLIST(state,value){
+        state.floorList = value
     }
 };
 
@@ -36,6 +42,15 @@ const actions = {
         let result = await reqGetBannerList()
         if(result.code === 200){
             context.commit("GETBANNERLIST",result.data)
+        }else {
+            alert('三级联动数据请求失败！')
+        }
+    },
+    //获取首页floor的数据
+    async getFloorList(context){
+        let result = await reqFloorList()
+        if(result.code === 200){
+            context.commit("GETFLOORLIST",result.data)
         }else {
             alert('三级联动数据请求失败！')
         }

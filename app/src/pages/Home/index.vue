@@ -11,9 +11,7 @@
     <!--  猜你喜欢组件-->
     <Like></Like>
     <!--  楼层喜欢组件-->
-    <Floor></Floor>
-    <Floor></Floor>
-    <Floor></Floor>
+    <Floor v-for="(floorItem,index) in floorList" :key="floorItem.id" :list="floorItem"></Floor>
     <!--  商标喜欢组件-->
     <Brand></Brand>
   </div>
@@ -26,6 +24,7 @@ import Rank from './Rank'
 import Like from './Like'
 import Floor from './Floor'
 import Brand from './Brand'
+import {mapState} from 'vuex'
 export default {
   name: "index",
   components:{
@@ -35,6 +34,14 @@ export default {
     Like,
     Floor,
     Brand
+  },
+  mounted() {
+    this.$store.dispatch('getFloorList')
+  },
+  computed:{
+    ...mapState({
+      floorList:state => state.home.floorList
+    })
   }
 }
 </script>

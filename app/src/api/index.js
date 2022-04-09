@@ -13,3 +13,8 @@ export const reqCategoryList = ()=>{
 export const reqGetBannerList = ()=>{
     return mockRequests.get('/banner')
 }
+
+//floor获取floor组件数据接口
+export const reqFloorList = ()=>{
+    return mockRequests.get('/floor')
+}
