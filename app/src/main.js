@@ -14,6 +14,9 @@ import store from '@/store'
 
 import '../src/mock/mockServe'
 
+//引入swiper样式，css
+import "swiper/css/swiper.css"
+
 new Vue({
   render: h => h(App),
   //注册路由组件
