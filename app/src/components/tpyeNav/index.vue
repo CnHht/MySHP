@@ -8,8 +8,8 @@
         <!--  继承第三方css过渡动画      -->
         <transition
             name="animate__animated animate__bounce animate__faster"
-            enter-active-class="animate__fadeInDown"
-            leave-active-class="animate__fadeOutDown"
+            enter-active-class="animate__fadeIn"
+            leave-active-class="animate__fadeOut"
         >
           <div class="sort" v-show="show">
             <!--    三级联动模块      -->
