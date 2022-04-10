@@ -8,7 +8,8 @@ vue  webpack axios less scss node 等等
 
 
 #### 笔记
-###day 1
+
+### day 1
 1)要求
 1.1：每一天老师书写代码务必三遍
 1.2:node + webpack + VScode + 谷歌浏览器 + git
