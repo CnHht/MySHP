@@ -14,10 +14,10 @@
           <div class="sort" v-show="show">
             <!--    三级联动模块      -->
             <div class="all-sort-list2" @click="GoSearch">
-              <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="ChangeIndex(index)"
+              <div class="item" v-for="(c1,index) in MyCategoryList" :key="c1.categoryId" @mouseenter="ChangeIndex(index)"
                    :class="{curr:currentIndex===index}">
                 <h3>
-                  <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryName">{{ c1.categoryName }}</a>
+                  <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{ c1.categoryName }}</a>
                 </h3>
                 <!--二三级分类-->
                 <!--   通过js完成二三级分类显示隐藏  -->
@@ -27,12 +27,12 @@
                       <dt>
                         <!--    路由实现页面跳转使用编程式导航而不使用声明式导航是因为声明式导航是使用到了虚拟dom，由于三级联动标签很多，非常消耗内存   -->
                         <a :data-categoryName="c2.categoryName"
-                           :data-category2Id="c2.categoryName">{{ c2.categoryName }}</a>
+                           :data-category2Id="c2.categoryId">{{ c2.categoryName }}</a>
                       </dt>
                       <dd>
                         <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
                           <a :data-categoryName="c3.categoryName"
-                             :data-category3Id="c3.categoryName">{{ c3.categoryName }}</a>
+                             :data-category3Id="c3.categoryId">{{ c3.categoryName }}</a>
                         </em>
                       </dd>
                     </dl>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import throttle from 'lodash/throttle';
 import 'animate.css'
 export default {
@@ -121,11 +121,7 @@ export default {
   },
   //接收store中的数据
   computed: {
-    ...mapState({
-      categoryList: (state) => {
-        return state.home.categoryList
-      }
-    })
+    ...mapGetters(['MyCategoryList'])
   },
 }
 </script>

@@ -59,6 +59,11 @@ const actions = {
 
 //getters :理解为vuex的计算属性
 const getters = {
+    MyCategoryList(state){
+        return state.categoryList.filter((item)=>{
+            return item.categoryId !== 9
+        })
+    }
 };
 
 export default {

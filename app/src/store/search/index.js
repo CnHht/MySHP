@@ -14,10 +14,10 @@ const mutations = {
 //action 处理action
 const actions = {
     //获取search模块数据
-    async GetSearchInfo(context,value){
+    async GetSearchInfo(context,value = {}){
          const result = await reqGetSearchInfo(value)
-        if (result.code === 200) context.commit('GETSEARCHINFO',result.data)
-        else alert('Search数据请求失败！')
+        if (result.code == 200) context.commit('GETSEARCHINFO',result.data)
+        else alert(result)
     }
 };
 

@@ -20,8 +20,4 @@ export const reqFloorList = ()=>{
 }
 
 //search获取搜素模块的数据接口 /api/list
-export const reqGetSearchInfo= (params)=>requests({
-    url:"/list",
-    method:"post",
-    data:params
-})
+export const reqGetSearchInfo = (params)=>requests({url:"/list",method:"post",data:params});
