@@ -8,7 +8,8 @@ vue  webpack axios less scss node 等等
 
 
 #### 笔记
-###day 1
+
+### day 1
 1)要求
 1.1：每一天老师书写代码务必三遍
 1.2:node + webpack + VScode + 谷歌浏览器 + git
@@ -166,7 +167,7 @@ query参数：路由不需要占位，写法类似于ajax当中query参数
      5: 路由组件能不能传递props数据?
      
 
-###day 2
+### day 2
 犯的错误:
 1:项目阶段，左侧菜单目录，只能有项目文件夹
 2:联想电脑安装node_modules依赖包的时候，经常丢包。npm install --save axios --force
@@ -399,7 +400,8 @@ this.$router.push()
 
 
 
-###day 4
+
+### day 4
 
 作业:利用过渡动画transiton，封装一个抽屉的效果。
 
@@ -585,7 +587,7 @@ swiper最新版本为7版本的，项目当中使用的是5版本
 https://www.swiper.com.cn/ 官网地址
 
 
-###day 5
+### day 5
 ------作业：
 晚上翻看一下swiperAPI
 
