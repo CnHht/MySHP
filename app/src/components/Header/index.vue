@@ -52,13 +52,22 @@ export default {
       };
       location.query = this.$route.query;
       this.$router.push(location);
+    },
+    clearKeyword(){
+      this.keyword = ""
     }
+
 
   },
   data(){
     return{
       keyword:'',
     }
+  },
+  mounted() {
+    //
+    this.$bus.$on('clear',this.clearKeyword)
+    console.log('清除keyword')
   }
 
 }

@@ -13,7 +13,7 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attrId">
+    <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attrId">
         <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">

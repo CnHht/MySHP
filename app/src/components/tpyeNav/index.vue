@@ -7,9 +7,9 @@
         <h2 class="all">全部商品分类</h2>
         <!--  继承第三方css过渡动画      -->
         <transition
-            name="animate__animated animate__bounce animate__faster"
+            name="animate__animated animate__bounce"
             enter-active-class="animate__fadeIn"
-            leave-active-class="animate__fadeOut"
+            leave-active-class="animate__fadeOut animate__faster"
         >
           <div class="sort" v-show="show">
             <!--    三级联动模块      -->

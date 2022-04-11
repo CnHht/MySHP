@@ -12,9 +12,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!--   分类的面包屑  -->
             <li class="with-x"
-              v-show="searchParams.categoryName || searchParams.keyword"
+              v-show="searchParams.categoryName "
             >{{searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
+            <!--    关键字的面包屑    -->
+            <li class="with-x"
+                v-show="searchParams.keyword "
+            >{{searchParams.keyword }}<i @click="removeKeyword">×</i></li>
           </ul>
         </div>
         <!--SearchSelector-->
@@ -172,6 +177,14 @@ export default {
       this.getData()
       if(this.$route.params){
         this.$router.push({name:'search',params:this.$route.params})
+      }
+    },
+    removeKeyword(){
+      this.searchParams.keyword = undefined
+      this.getData()
+      this.$bus.$emit('clear')
+      if(this.$route.query){
+        this.$router.push({name:'search',query:this.$route.query})
       }
     }
   },
