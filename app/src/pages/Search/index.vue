@@ -14,16 +14,20 @@
           <ul class="fl sui-tag">
             <!--   分类的面包屑  -->
             <li class="with-x"
-              v-show="searchParams.categoryName "
+              v-if="searchParams.categoryName "
             >{{searchParams.categoryName }}<i @click="removeCategoryName">×</i></li>
             <!--    关键字的面包屑    -->
             <li class="with-x"
-                v-show="searchParams.keyword "
+                v-if="searchParams.keyword "
             >{{searchParams.keyword }}<i @click="removeKeyword">×</i></li>
+            <!--    trademark的面包屑    -->
+            <li class="with-x"
+                v-if="searchParams.trademark "
+            >{{searchParams.trademark.split(":")[1] }}<i @click="removetradeMark">×</i></li>
           </ul>
         </div>
         <!--SearchSelector-->
-        <search-selector></search-selector>
+        <search-selector @tradeMarkInfo="tradeMarkInfo"></search-selector>
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -186,6 +190,14 @@ export default {
       if(this.$route.query){
         this.$router.push({name:'search',query:this.$route.query})
       }
+    },
+    tradeMarkInfo(tradeMark){
+      this.searchParams.trademark = `${tradeMark.tmId}:${tradeMark.tmName}`
+      this.getData()
+    },
+    removetradeMark(){
+      this.searchParams.trademark = undefined
+      this.getData()
     }
   },
   //监听组件身上的属性值变化
