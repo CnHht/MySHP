@@ -24,10 +24,14 @@
             <li class="with-x"
                 v-if="searchParams.trademark "
             >{{searchParams.trademark.split(":")[1] }}<i @click="removetradeMark">×</i></li>
+            <!--    平台售卖属性的的面包屑    -->
+            <li class="with-x"
+                v-for="(attrValue,index) in searchParams.props" :key="index"
+            >{{attrValue.split(":")[1]}}<i @click="removeAttrValue(index)">×</i></li>
           </ul>
         </div>
         <!--SearchSelector-->
-        <search-selector @tradeMarkInfo="tradeMarkInfo"></search-selector>
+        <search-selector @tradeMarkInfo="tradeMarkInfo" @AttrInfo="AttrInfo"></search-selector>
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -198,7 +202,18 @@ export default {
     removetradeMark(){
       this.searchParams.trademark = undefined
       this.getData()
+    },
+    AttrInfo(attr,attrValue){
+      const props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      //数组去重
+      if (this.searchParams.props.indexOf(props) === -1) this.searchParams.props.push(props)
+      this.getData()
+    },
+    removeAttrValue(index){
+      this.searchParams.props.splice(index,1)
+      this.getData()
     }
+
   },
   //监听组件身上的属性值变化
   watch:{
