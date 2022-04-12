@@ -145,11 +145,14 @@ export default {
       },
     }
   },
+  //在挂载之前调用一次|可以在发请求之前将带有参数进行修改
   beforeMount() {
     //ES6合并对象
+    //在发请求之前，把接口需要传递参数，进行整理（在给服务器发请求之前，把参数整理好，服务器就会返回查询的数据）
     Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
   mounted() {
+    //在发请求之前咱们需要将searchParams里面参数进行修改带给服务器
     this.getData()
   },
   computed: {
@@ -173,47 +176,68 @@ export default {
     }
   },
   methods:{
+    //把发请求的这个action封装到一个函数里面
+    //将来需要再次发请求，你只需要在调用这个函数即可
     getData(){
       this.$store.dispatch("GetSearchInfo", this.searchParams);
     },
+    //删除分类的名字
     removeCategoryName(){
+      //把带给服务器的参数置空了，还需要向服务器发请求
+      //带给服务器参数说明可有可无的：如果属性值为空的字符串还是会把相应的字段带给服务器
+      //但是你把相应的字段变为undefined，当前这个字段不会带给服务器
       //对象置为undefined时，不会把对象传递给服务器，性能更好
       this.searchParams.categoryName = undefined
       this.searchParams.category1Id = undefined
       this.searchParams.category2Id = undefined
       this.searchParams.category3Id = undefined
       this.getData()
+      //地址栏也需要需改：进行路由跳转(现在的路由跳转只是跳转到自己这里)
+      //严谨：本意是删除query，如果路径当中出现params不应该删除，路由跳转的时候应该带着
       if(this.$route.params){
         this.$router.push({name:'search',params:this.$route.params})
       }
     },
+    //删除关键字
     removeKeyword(){
+      //给服务器带的参数searchParams的keyword置空
       this.searchParams.keyword = undefined
+      //再次发请求
       this.getData()
+      //通知兄弟组件Header清除关键字
       this.$bus.$emit('clear')
       if(this.$route.query){
         this.$router.push({name:'search',query:this.$route.query})
       }
     },
+    //自定义事件回调
     tradeMarkInfo(tradeMark){
+      //1:整理品牌字段的参数  "ID:品牌名称"
       this.searchParams.trademark = `${tradeMark.tmId}:${tradeMark.tmName}`
       this.getData()
     },
+    //删除品牌的信息
     removetradeMark(){
+      //将品牌信息置空
       this.searchParams.trademark = undefined
       this.getData()
     },
+    //收集平台属性地方回调函数（自定义事件）
     AttrInfo(attr,attrValue){
+      //["属性ID:属性值:属性名"]
       const props = `${attr.attrId}:${attrValue}:${attr.attrName}`
       //数组去重
       if (this.searchParams.props.indexOf(props) === -1) this.searchParams.props.push(props)
       this.getData()
     },
+    //removeAttr删除售卖的属性
     removeAttrValue(index){
       this.searchParams.props.splice(index,1)
       this.getData()
     },
     changeOrder(flag){
+      //flag:用户每一次点击li标签的时候，用于区分是综合（1）还是价格（2）
+      //现获取order初始状态【咱们需要通过初始状态去判断接下来做什么】
       // const originOrder = this.searchParams.order
       let originFlag = this.searchParams.order.split(':')[0]
       let originSort = this.searchParams.order.split(':')[1]
