@@ -139,7 +139,7 @@ export default {
     .all {
       width: 210px;
       height: 45px;
-      background-color: lightskyblue;
+      background-color: #409EFF;
       line-height: 45px;
       text-align: center;
       color: #fff;

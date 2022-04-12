@@ -21,9 +21,10 @@ import '../src/mock/mockServe'
 import "swiper/css/swiper.css"
 
 //引入element样式组件库
-import { Input,Button } from 'element-ui';
+import { Input,Button,Icon} from 'element-ui';
 Vue.component(Input.name, Input);
 Vue.component(Button.name, Button);
+Vue.component(Icon.name, Icon);
 new Vue({
   render: h => h(App),
   //注册路由组件

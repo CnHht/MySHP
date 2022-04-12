@@ -37,23 +37,11 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:SaleActive}" @click="changeOrder('1')">
+                  <a >综合 <i v-show="SaleActive" :class="{'el-icon-bottom':isDesc,'el-icon-top':isAsc}"></i></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:PriceActive}" @click="changeOrder('2')">
+                  <a >价格 <i v-show="PriceActive" :class="{'el-icon-bottom':isDesc,'el-icon-top':isAsc}"></i></a>
                 </li>
               </ul>
             </div>
@@ -170,7 +158,19 @@ export default {
     //   // goodsList:state => state.search.searchList.goodsList(),
     //
     // })
-    ...mapGetters(['goodsList'])
+    ...mapGetters(['goodsList']),
+    SaleActive(){
+      return this.searchParams.order.indexOf('1') !== -1
+    },
+    PriceActive(){
+      return this.searchParams.order.indexOf('2') !== -1
+    },
+    isAsc(){
+      return this.searchParams.order.indexOf('asc') !== -1
+    },
+    isDesc(){
+      return this.searchParams.order.indexOf('desc') !== -1
+    }
   },
   methods:{
     getData(){
@@ -212,8 +212,22 @@ export default {
     removeAttrValue(index){
       this.searchParams.props.splice(index,1)
       this.getData()
+    },
+    changeOrder(flag){
+      // const originOrder = this.searchParams.order
+      let originFlag = this.searchParams.order.split(':')[0]
+      let originSort = this.searchParams.order.split(':')[1]
+      let NewOrder=""
+      if(flag === originFlag){
+        //如果当前originFlag == flag 说明当前点击的是与之前相同的<li>，只需要修改sort{desc,asc}即可
+        NewOrder = `${originFlag}:${originSort === 'desc' ? 'asc':'desc'}`
+      }else {
+        //如果当前originFlag ！= flag 说明当前点击的是与之前不同的<li>，只需要修改当前flag，将active指向当前点击即可，sort按默认的desc
+        NewOrder= `${flag}:{'desc'}`
+      }
+      this.searchParams.order = NewOrder
+      this.getData()
     }
-
   },
   //监听组件身上的属性值变化
   watch:{
@@ -341,7 +355,7 @@ export default {
 
               &.active {
                 a {
-                  background: #e1251b;
+                  background: #F56C6C;
                   color: #fff;
                 }
               }
