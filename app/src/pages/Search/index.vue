@@ -77,36 +77,8 @@
               </li>
             </ul>
           </div>
-
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          0<!--          //continues代表连续分页数是5-->
+          <MyPagination :pageNo="28" :pageSize="3" :total="91" :continues="5"></MyPagination>
         </div>
       </div>
     </div>
@@ -244,10 +216,10 @@ export default {
       let NewOrder=""
       if(flag === originFlag){
         //如果当前originFlag == flag 说明当前点击的是与之前相同的<li>，只需要修改sort{desc,asc}即可
-        NewOrder = `${originFlag}:${originSort === 'desc' ? 'asc':'desc'}`
+        NewOrder = `${originFlag}:${originSort === "desc" ? "asc":"desc"}`
       }else {
         //如果当前originFlag ！= flag 说明当前点击的是与之前不同的<li>，只需要修改当前flag，将active指向当前点击即可，sort按默认的desc
-        NewOrder= `${flag}:{'desc'}`
+        NewOrder= `${flag}:${'desc'}`
       }
       this.searchParams.order = NewOrder
       this.getData()

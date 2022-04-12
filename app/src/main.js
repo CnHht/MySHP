@@ -8,6 +8,9 @@ Vue.component(typeNav.name,typeNav)
 //注册全局组件轮播图carousel
 import Carousel from '../src/components/Carousel'
 Vue.component(Carousel.name,Carousel)
+//注册全局组件分页器
+import Pagination from '../src/components/Pagination'
+Vue.component(Pagination.name,Pagination)
 //测试axios请求api
 // import {reqCategoryList} from "@/api";
 // reqCategoryList()
