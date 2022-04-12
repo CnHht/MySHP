@@ -32,8 +32,10 @@
       </h1>
       <div class="searchArea">
         <form action="###" class="searchForm">
-          <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>
+
+          <el-input type="text" id="autocomplete" class="searchInput" v-model="keyword" clearable/>
+          <el-button type="primary" icon="el-icon-search" @click="goSearch">搜索</el-button>
+<!--          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>-->
         </form>
       </div>
     </div>
@@ -133,37 +135,43 @@ export default {
     }
 
     .searchArea {
-      float: right;
+      //float: right;
       margin-top: 35px;
 
       .searchForm {
         overflow: hidden;
 
-        input {
-          box-sizing: border-box;
+        .searchInput {
+          margin-left: 345px;
           width: 490px;
-          height: 32px;
+          height: 38px;
           padding: 0px 4px;
-          border: 2px solid skyblue;
-          float: left;
-
-          &:focus {
-            outline: none;
-          }
         }
-
-        button {
-          height: 32px;
-          width: 68px;
-          background-color: skyblue;
-          border: none;
-          color: #fff;
-          float: left;
-          cursor: pointer;
-          &:focus {
-            outline: none;
-          }
-        }
+        //input {
+        //  box-sizing: border-box;
+        //  width: 490px;
+        //  height: 38px;
+        //  padding: 0px 4px;
+        //  border: 2px solid skyblue;
+        //  float: left;
+        //
+        //  &:focus {
+        //    outline: none;
+        //  }
+        //}
+        //
+        //button {
+        //  height: 38px;
+        //  width: 85px;
+        //  background-color: skyblue;
+        //  border: none;
+        //  color: #fff;
+        //  float: left;
+        //  cursor: pointer;
+        //  &:focus {
+        //    outline: none;
+        //  }
+        //}
       }
     }
   }
