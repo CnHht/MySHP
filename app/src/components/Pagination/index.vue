@@ -1,20 +1,32 @@
 <template>
   <div class="pagination">
 
-    <button>上一页</button>
-    <button v-if="!(pageNo < continues-1)">1</button>
-    <button v-if="!(pageNo < continues)">···</button>
+    <button :disabled="pageNo === 1" @click="$emit('getPageNo',pageNo - 1)">上一页</button>
+    <button v-if="StartEndNum.start > 1"
+            @click="$emit('getPageNo', 1)"
+            :class="{active:pageNo === 1}">1</button>
+    <button v-if="StartEndNum.start > 2">···</button>
 
     <!--   continues部分 -->
-    <button v-for="(pageNum,index) in StartEndNum.end" :key="index" v-if="pageNum >= StartEndNum.start">{{pageNum}}</button>
+    <button
+        v-for="(pageNum,index) in StartEndNum.end" :key="index"
+        v-if="pageNum >= StartEndNum.start"
+        @click="$emit('getPageNo',pageNum)"
+        :class="{active:pageNo === pageNum}"
+    >{{pageNum}}</button>
 
-    <button  v-if="!(pageNo >= totalPage - 2 )">···</button>
-    <button v-if="!(pageNo >= totalPage )" {{ totalPage }}</button>
+    <button  v-if="StartEndNum.end < totalPage -1">···</button>
+    <button v-if="StartEndNum.end < totalPage "
+            @click="$emit('getPageNo',totalPage)"
+            :class="{active:pageNo === totalPage}"
+    >
+      {{ totalPage }}
+    </button>
 
-    <button>下一页</button>
+    <button :disabled=" pageNo === totalPage" @click="$emit('getPageNo',pageNo + 1)">下一页</button>
 
     <button style="margin-left: 30px">共 {{total}} 条</button>
-    <h1>{{StartEndNum}}</h1>
+
   </div>
 </template>
 

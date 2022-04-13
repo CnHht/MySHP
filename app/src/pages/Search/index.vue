@@ -51,9 +51,9 @@
               <li class="yui3-u-1-5" v-for="(goods,index) in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank">
+                    <router-link :to="`/detail/${goods.id}`" >
                       <img :src="goods.defaultImg"/>
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -77,8 +77,8 @@
               </li>
             </ul>
           </div>
-          0<!--          //continues代表连续分页数是5-->
-          <MyPagination :pageNo="28" :pageSize="3" :total="91" :continues="5"></MyPagination>
+          <!--          //continues代表连续分页数是5-->
+          <MyPagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"></MyPagination>
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@ export default {
         //排序:初始状态应该是综合且降序
         order: "1:desc",
         //第几页
-        pageNo: 1,
+        pageNo: 3,
         //每一页展示条数
         pageSize: 10,
         //平台属性的操作
@@ -145,7 +145,10 @@ export default {
     },
     isDesc(){
       return this.searchParams.order.indexOf('desc') !== -1
-    }
+    },
+    ...mapState({
+      total:state => state.search.searchList.total,
+    })
   },
   methods:{
     //把发请求的这个action封装到一个函数里面
@@ -223,6 +226,11 @@ export default {
       }
       this.searchParams.order = NewOrder
       this.getData()
+    },
+    //获取当前第几页
+    getPageNo(pageNo){
+        this.searchParams.pageNo = pageNo
+        this.getData()
     }
   },
   //监听组件身上的属性值变化

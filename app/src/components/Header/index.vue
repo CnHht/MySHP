@@ -33,8 +33,8 @@
       <div class="searchArea">
         <form action="###" class="searchForm">
 
-          <el-input type="text" id="autocomplete" class="searchInput" v-model="keyword" clearable/>
-          <el-button type="primary" icon="el-icon-search" @click="goSearch">搜索</el-button>
+          <el-input type="text" id="autocomplete" class="searchInput" v-model="keyword" clearable  @keyup.enter.native="goSearch"/>
+          <el-button type="primary" icon="el-icon-search" @click="goSearch" >搜索</el-button>
 <!--          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">搜索</button>-->
         </form>
       </div>
