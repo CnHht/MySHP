@@ -6,10 +6,9 @@ import Register from "@/pages/Register";
 
 export default [
     {
-        //跳转商品详细信息是传递SkuId
-        path:'/detail/:skuid',
-        component:Detail,
-        meta:{isShowFooter:true},
+        name: 'detail',  // 是当前路由的标识名称
+        path: '/detail/:skuId',
+        component: Detail,
     },
     {
         path:'/home',

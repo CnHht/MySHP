@@ -51,7 +51,7 @@
               <li class="yui3-u-1-5" v-for="(goods,index) in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <router-link :to="`/detail/${goods.id}`" >
+                    <router-link :to="`/detail/${goods.id}`">
                       <img :src="goods.defaultImg"/>
                     </router-link>
                   </div>
@@ -107,9 +107,9 @@ export default {
         //排序:初始状态应该是综合且降序
         order: "1:desc",
         //第几页
-        pageNo: 3,
+        pageNo: 1,
         //每一页展示条数
-        pageSize: 10,
+        pageSize: 3,
         //平台属性的操作
         props: [],
         //品牌
