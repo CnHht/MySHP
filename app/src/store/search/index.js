@@ -16,9 +16,9 @@ const actions = {
     //获取search模块数据
     async GetSearchInfo(context,value = {}){
          const result = await reqGetSearchInfo(value)
-        if (result.code === 200) context.commit('GETSEARCHINFO',result.data)
+        if (result.code == 200) context.commit('GETSEARCHINFO',result.data)
         else alert(result)
-    }
+    },
 };
 
 //getters :理解为vuex的计算属性

@@ -3,8 +3,14 @@ import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Search from "@/pages/Search";
 import Register from "@/pages/Register";
-
+import AddCartSuccess from "@/pages/AddCartSuccess"
 export default [
+    {
+        name: 'addcartsuccess',  // 是当前路由的标识名称
+        path: '/addcartsuccess/',
+        component: AddCartSuccess,
+        meta:{isShowFooter:true},
+    },
     {
         name: 'detail',  // 是当前路由的标识名称
         path: '/detail/:skuId',

@@ -6,9 +6,9 @@
     <section class="con">
       <!-- 导航路径区域 -->
       <div class="conPoin">
-        <span v-show="categoryView.category1Id"> {{categoryView.category1Name}}</span>
-        <span v-show="categoryView.category2Id"> {{categoryView.category2Name}}</span>
-        <span v-show="categoryView.category3Id"> {{categoryView.category3Name}}</span>
+        <span v-show="categoryView.category1Id"> {{ categoryView.category1Name }}</span>
+        <span v-show="categoryView.category2Id"> {{ categoryView.category2Name }}</span>
+        <span v-show="categoryView.category3Id"> {{ categoryView.category3Name }}</span>
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
@@ -22,14 +22,14 @@
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
-            <h3 class="InfoName">{{skuInfo.skuName}}</h3>
-            <p class="news">{{skuInfo.skuDesc}}</p>
+            <h3 class="InfoName">{{ skuInfo.skuName }}</h3>
+            <p class="news">{{ skuInfo.skuDesc }}</p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</div>
                 <div class="price">
                   <i>¥</i>
-                  <em>{{skuInfo.price}}</em>
+                  <em>{{ skuInfo.price }}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
@@ -63,23 +63,24 @@
             <div class="chooseArea">
               <div class="choosed"></div>
               <dl v-for="(spu,index) in spuSaleAttrList" :key="spu.id">
-                <dt class="title">{{spu.saleAttrName}}</dt>
+                <dt class="title">{{ spu.saleAttrName }}</dt>
                 <dd changepirce="0"
                     :class="{active:item.isChecked==1}"
                     v-for="(item,index) in spu.spuSaleAttrValueList"
                     :key="item.id"
                     @click="changeActive(item,spu.spuSaleAttrValueList)"
-                >{{item.saleAttrValueName}}</dd>
+                >{{ item.saleAttrValueName }}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" v-model="goodsNum" @change="changeSkuNum" >
-                <a href="javascript:" class="plus" @click="addGoods" >+</a>
-                <a href="javascript:" class="mins"  @click="subGoods" >-</a>
+                <input autocomplete="off" class="itxt" v-model="goodsNum" @change="changeSkuNum">
+                <a href="javascript:" class="plus" @click="addGoods">+</a>
+                <a href="javascript:" class="mins" @click="subGoods">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a @click="postSkuInfo(goodsNum)">加入购物车</a>
               </div>
             </div>
           </div>
@@ -330,69 +331,78 @@
 <script>
 import Zoom from "@/pages/Detail/Zoom";
 import ImageList from "@/pages/Detail/imageList";
-import {mapState,mapGetters} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   name: "Detail",
   components: {ImageList, Zoom},
-  data(){
+  data() {
     return {
-      goodsNum:1
+      goodsNum: 1
     }
 
   },
   mounted() {
     //派发action获取产品详情的信息
-    console.log( this.$route.params)
+    console.log(this.$route.params)
     this.$store.dispatch("getGoodInfo", this.$route.params.skuId);
   },
-  computed:{
+  computed: {
     ...mapState({
-            GoodInfo:state => this.$store.state.detail.GoodInfo
+          GoodInfo: state => this.$store.state.detail.GoodInfo
         }
     ),
-    ...mapGetters(['categoryView','skuInfo','spuSaleAttrList']),
-    skuImageList(){
+    ...mapGetters(['categoryView', 'skuInfo', 'spuSaleAttrList']),
+    skuImageList() {
       return this.skuInfo.skuImageList || []
     }
   },
-  methods:{
-    changeActive(item,spuArr){
+  methods: {
+    changeActive(item, spuArr) {
       //排他
       //把当前item的全部属性置为'0'
-      spuArr.forEach(saleValue=>{
-          saleValue.isChecked = '0'
-        }
+      spuArr.forEach(saleValue => {
+            saleValue.isChecked = '0'
+          }
       )
       item.isChecked = '1'
     },
-    addGoods(){
-      this.goodsNum ++
+    addGoods() {
+      this.goodsNum++
     },
-    subGoods(){
-      if(this.goodsNum < 1){
+    subGoods() {
+      if (this.goodsNum < 1) {
         this.goodsNum = 1
       }
     },
-    changeSkuNum(event){
+    changeSkuNum(event) {
       let value = event.target.value * 1
-      if(isNaN(value) || value < 1){
+      if (isNaN(value) || value < 1) {
         this.goodsNum = 1
-      }else {
+      } else {
         this.goodsNum = parseInt(value)
       }
-
-
+    },
+    async postSkuInfo(skuNum) {
+      try {
+        await this.$store.dispatch('AddToShopCart',
+            {skuId: this.$route.params.skuId, skuNum})
+        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
+        this.$router.push({name:'addcartsuccess',query:{
+            sknum:skuNum
+          }})
+      } catch (err) {
+        alert(err.message)
+      }
 
 
     }
-
 
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .detail {
   .con {
     width: 1200px;
@@ -401,7 +411,7 @@ export default {
     .conPoin {
       padding: 9px 15px 9px 0;
 
-      &>span+span:before {
+      & > span + span:before {
         content: "/\00a0";
         padding: 0 5px;
         color: #ccc;
@@ -668,7 +678,7 @@ export default {
             }
 
             .goodsList {
-              &>li {
+              & > li {
                 margin: 5px 0 15px;
                 border-bottom: 1px solid #ededed;
                 padding-bottom: 5px;
@@ -833,7 +843,7 @@ export default {
           li {
             float: left;
 
-            &+li>a {
+            & + li > a {
               border-left: 1px solid #ddd;
             }
 

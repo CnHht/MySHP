@@ -86,6 +86,7 @@ export default {
     left: 0;
     top: 0;
     display: none;
+    border-radius: 25px;
   }
 
   .big {
