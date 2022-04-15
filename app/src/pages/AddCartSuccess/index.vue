@@ -2,7 +2,7 @@
   <div class="cart-complete-wrap">
     <type-nav></type-nav>
     <div class="cart-complete">
-      <h3><i class="sui-icon icon-pc-right"></i>商品已成功加入购物车！</h3>
+      <h3><i class="el-icon-sold-out"></i>商品已成功加入购物车！</h3>
       <div class="goods">
         <div class="left-good">
           <div class="left-pic">
@@ -11,13 +11,13 @@
           <div class="right-info">
             <p class="title">{{ skuInfo.skuName }}</p>
             <p class="attr">
-              {{ skuInfo.skuDesc }} 数量:{{ $route.query.skuNum }}
+              {{ skuInfo.skuDesc }} 数量:{{ $route.query.sknum }}
             </p>
           </div>
         </div>
         <div class="right-gocart">
-          <a class="sui-btn btn-xlarge" >查看商品详情</a>
-          <a to="/shopcart">去购物车结算</a>
+          <router-link class="sui-btn btn-xlarge" :to="`/detail/${skuInfo.id}`">查看商品详情</router-link>
+          <router-link to="/shopcart">去购物车结算</router-link>
         </div>
       </div>
     </div>
@@ -32,6 +32,11 @@ export default {
       return JSON.parse(sessionStorage.getItem("SKUINFO"));
     },
   },
+  mounted() {
+
+  },
+  methods:{
+  }
 };
 </script>
 

@@ -4,7 +4,14 @@ import Login from "@/pages/Login";
 import Search from "@/pages/Search";
 import Register from "@/pages/Register";
 import AddCartSuccess from "@/pages/AddCartSuccess"
+import ShopCart from "@/pages/ShopCart"
 export default [
+    {
+        name: 'shopcart',  // 是当前路由的标识名称
+        path: '/shopcart',
+        component: ShopCart,
+        meta:{isShowFooter:true},
+    },
     {
         name: 'addcartsuccess',  // 是当前路由的标识名称
         path: '/addcartsuccess/',

@@ -4,8 +4,11 @@ import nprogress from "nprogress";
 //在当前模块中引入store
 //如果出现进度条没有显示：一定是你忘记了引入样式了
 import "nprogress/nprogress.css";
+//在当前模块中引入store仓库
+import store from '../store'
 //底下的代码也是创建axios实例
 let requests = axios.create({
+
     //基础路径
     baseURL: "/api",
     //请求不能超过5S
@@ -15,6 +18,11 @@ let requests = axios.create({
 //请求拦截器----在项目中发请求（请求没有发出去）可以做一些事情
 requests.interceptors.request.use((config) => {
     //现在的问题是config是什么?配置对象
+    //给请求头添加一个uuid字段便于后台服务器验证身份（请求只能带两个参数，所以在请求头中添加uuid）
+    if(store.state.detail.uuid_token){
+        //其中userTempId字段是后台写好的
+        config.headers.userTempId = store.state.detail.uuid_token
+    }
     //可以让进度条开始动
     nprogress.start();
     return config;

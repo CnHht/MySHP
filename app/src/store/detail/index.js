@@ -2,9 +2,12 @@
 
 //state 存储数据的地方
 import {reqAddOrUpdateShopCart, reqGoodsInfo} from "@/api";
+import {getUUID} from "@/utils/uuid_token";
 
 const state = {
     goodInfo: {},
+    //游客身份的uuid
+    uuid_token:getUUID()
 };
 
 //mutations 修改state的唯一手段
