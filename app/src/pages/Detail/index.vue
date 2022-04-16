@@ -387,10 +387,12 @@ export default {
       try {
         await this.$store.dispatch('AddToShopCart',
             {skuId: this.$route.params.skuId, skuNum})
-        sessionStorage.setItem("SKUINFO",JSON.stringify(this.skuInfo))
-        this.$router.push({name:'addcartsuccess',query:{
-            sknum:skuNum
-          }})
+        sessionStorage.setItem("SKUINFO", JSON.stringify(this.skuInfo))
+        this.$router.push({
+          name: 'addcartsuccess', query: {
+            sknum: skuNum
+          }
+        })
       } catch (err) {
         alert(err.message)
       }
@@ -402,7 +404,7 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
 .detail {
   .con {
     width: 1200px;

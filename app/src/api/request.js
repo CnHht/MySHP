@@ -19,7 +19,7 @@ let requests = axios.create({
 requests.interceptors.request.use((config) => {
     //现在的问题是config是什么?配置对象
     //给请求头添加一个uuid字段便于后台服务器验证身份（请求只能带两个参数，所以在请求头中添加uuid）
-    if(store.state.detail.uuid_token){
+    if (store.state.detail.uuid_token) {
         //其中userTempId字段是后台写好的
         config.headers.userTempId = store.state.detail.uuid_token
     }
