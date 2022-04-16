@@ -109,7 +109,7 @@ export default {
         //第几页
         pageNo: 1,
         //每一页展示条数
-        pageSize: 3,
+        pageSize: 5,
         //平台属性的操作
         props: [],
         //品牌

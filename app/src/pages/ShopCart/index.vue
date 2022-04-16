@@ -43,11 +43,11 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isCheckAll" @change="checkAll(isCheckAll)">
+        <input class="chooseAll" type="checkbox" :checked="isCheckAll && CartListInfo.length > 0" @change="updatecheckAll">
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteAll">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -70,6 +70,7 @@
 <script>
 import {mapGetters} from 'vuex'
 import throttle from 'lodash/throttle';
+
 export default {
   name: 'ShopCart',
   mounted() {
@@ -99,50 +100,66 @@ export default {
       this.$store.dispatch('GetShopCartList')
     },
     //修改产品的个数
-    Handler:throttle(async function (type, changeNum, cart){
-       switch (type) {
-         case "add":
-           changeNum = 1
-           break;
-         case "sub":
-           changeNum = cart.skuNum > 1 ? -1 : 0
-           break;
-         case "change":
-           if (isNaN(changeNum) || changeNum < 1) {
-             changeNum = 0
-           } else {
-             changeNum = parseInt(changeNum) - cart.skuNum
-           }
-           break;
-       }
-       try {
-         await this.$store.dispatch('AddToShopCart', {skuId: cart.skuId, skuNum: changeNum})
-         this.getData()
-       } catch (err) {
-         alert(err.message)
-       }
-     },500),
-    async delShopCart(cart){
+    Handler: throttle(async function (type, changeNum, cart) {
+      switch (type) {
+        case "add":
+          changeNum = 1
+          break;
+        case "sub":
+          changeNum = cart.skuNum > 1 ? -1 : 0
+          break;
+        case "change":
+          if (isNaN(changeNum) || changeNum < 1) {
+            changeNum = 0
+          } else {
+            changeNum = parseInt(changeNum) - cart.skuNum
+          }
+          break;
+      }
       try {
-        await this.$store.dispatch('DelShopCart',cart.skuId)
+        await this.$store.dispatch('AddToShopCart', {skuId: cart.skuId, skuNum: changeNum})
         this.getData()
-      }catch (err){
+      } catch (err) {
+        alert(err.message)
+      }
+    }, 500),
+    async delShopCart(cart) {
+      try {
+        await this.$store.dispatch('DelShopCart', cart.skuId)
+        this.getData()
+      } catch (err) {
         alert(err.message)
       }
     },
-    async updateCheck(cart){
+    async updateCheck(cart) {
       let check = cart.isChecked
-      if(check == 1) check = 0
-      else  check= 1
-     try {
-       await this.$store.dispatch('UpdateCheck', {skuId: cart.skuId, isChecked: check})
-       this.getData()
-     }catch (err) {
-       alert(err.message)
-     }
+      if (check == 1) check = 0
+      else check = 1
+      try {
+        await this.$store.dispatch('UpdateCheck', {skuId: cart.skuId, isChecked: check})
+        this.getData()
+      } catch (err) {
+
+      }
     },
-    checkAll(isCheckAll){
-      this.isCheckAll = isCheckAll == true ? false : true
+    async updatecheckAll(event) {
+      let checked = event.target.checked ? "1" : "0"
+      try {
+        await this.$store.dispatch('UpdateCheckAll', checked)
+        this.getData()
+      } catch (e) {
+
+      }
+    },
+    async deleteAll() {
+      try {
+        await this.$store.dispatch('DeleteAllCheckedCart')
+        this.getData()
+      } catch (e) {
+        alert(e.message)
+      }
+
+
     }
   }
 }
