@@ -1,11 +1,24 @@
 import Detail from "@/pages/Detail";
 import Home from "@/pages/Home";
-import Login from "@/pages/Login";
+
 import Search from "@/pages/Search";
-import Register from "@/pages/Register";
 import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
+import Login from "@/pages/Login"
+import Register from "@/pages/Register"
 export default [
+    {
+        name: 'login',  // 是当前路由的标识名称
+        path: '/login',
+        component: Login,
+        meta:{isShowFooter:true},
+    },
+    {
+        name: 'register',  // 是当前路由的标识名称
+        path: '/register',
+        component: Register,
+        meta:{isShowFooter:true},
+    },
     {
         name: 'shopcart',  // 是当前路由的标识名称
         path: '/shopcart',
