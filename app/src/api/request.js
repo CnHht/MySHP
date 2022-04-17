@@ -23,6 +23,10 @@ requests.interceptors.request.use((config) => {
         //其中userTempId字段是后台写好的
         config.headers.userTempId = store.state.detail.uuid_token
     }
+    if(store.state.user.token){
+        config.headers.token = store.state.user.token
+    }
+
     //可以让进度条开始动
     nprogress.start();
     return config;

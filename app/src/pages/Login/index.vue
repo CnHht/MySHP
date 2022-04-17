@@ -1,74 +1,91 @@
 <template>
-  <div className="login-container">
+  <div class="login-container">
     <!-- 登录 -->
-    <div className="login-wrap">
-      <div className="login">
-        <div className="loginform">
-          <ul className="tab clearFix">
+    <div class="login-wrap">
+      <div class="login">
+        <div class="loginform">
+          <ul class="tab clearFix">
             <li>
               <a href="##" style="border-right: 0;">扫描登录</a>
             </li>
             <li>
-              <a href="##" className="current">账户登录</a>
+              <a href="##" class="current">账户登录</a>
             </li>
           </ul>
 
-          <div className="content">
-            <form >
-              <div className="input-text clearFix">
+          <div class="content">
+            <form>
+              <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号">
+                <input
+                    type="text"
+                    placeholder="邮箱/用户名/手机号"
+                    v-model="phone"
+                />
               </div>
-              <div className="input-text clearFix">
-                <span className="pwd"></span>
-                <input type="text" placeholder="请输入密码">
+              <div class="input-text clearFix">
+                <span class="pwd"></span>
+                <input
+                    type="text"
+                    placeholder="请输入密码"
+                    v-model="password"
+                />
               </div>
-              <div className="setting clearFix">
-                <label className="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked="">
+              <div class="setting clearFix">
+                <label class="checkbox inline">
+                  <input name="m1" type="checkbox" value="2" checked="" />
                   自动登录
                 </label>
-                <span className="forget">忘记密码？</span>
+                <span class="forget">忘记密码？</span>
               </div>
-              <button className="btn">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click.prevent="userlogin">
+                登&nbsp;&nbsp;录
+              </button>
             </form>
 
-            <div className="call clearFix">
+            <div class="call clearFix">
               <ul>
-                <li><img src="./images/qq.png" alt=""></li>
-                <li><img src="./images/sina.png" alt=""></li>
-                <li><img src="./images/ali.png" alt=""></li>
-                <li><img src="./images/weixin.png" alt=""></li>
+                <li><img src="./images/qq.png" alt="" /></li>
+                <li><img src="./images/sina.png" alt="" /></li>
+                <li><img src="./images/ali.png" alt="" /></li>
+                <li><img src="./images/weixin.png" alt="" /></li>
               </ul>
-              <router-link className="register" to="/register">立即注册</router-link>
+              <router-link class="register" to="/register"
+              >立即注册</router-link
+              >
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 底部 -->
-    <div className="copyright">
-      <ul>
-        <li>关于我们</li>
-        <li>联系我们</li>
-        <li>联系客服</li>
-        <li>商家入驻</li>
-        <li>营销中心</li>
-        <li>手机尚品汇</li>
-        <li>销售联盟</li>
-        <li>尚品汇社区</li>
-      </ul>
-      <div className="address">地址：北京市昌平区宏福科技园综合楼6层</div>
-      <div className="beian">京ICP备19006430号
-      </div>
-    </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
-}
+  name: "Login",
+  data() {
+    return {
+      phone: "",
+      password: "",
+    };
+  },
+  methods: {
+    //登录的回调函数
+    async userlogin(){
+      try {
+        const {phone,password} = this
+        phone && password && await this.$store.dispatch('UserLogin',{phone,password})
+        this.$router.push({
+          path:'/home'
+        })
+      }catch (e) {
+        console.log(e.message)
+      }
+    }
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -95,7 +112,6 @@ export default {
       padding: 20px;
 
       .tab {
-
         li {
           width: 50%;
           float: left;
@@ -112,7 +128,6 @@ export default {
             border: 1px solid #ddd;
             box-sizing: border-box;
             text-decoration: none;
-
           }
 
           .current {
@@ -221,7 +236,6 @@ export default {
             text-decoration: underline;
           }
         }
-
       }
     }
   }
@@ -241,6 +255,5 @@ export default {
       }
     }
   }
-
 }
 </style>
