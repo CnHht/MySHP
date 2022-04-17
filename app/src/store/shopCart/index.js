@@ -47,7 +47,7 @@ const actions = {
     },
     UpdateCheckAll(context, value) {
         let promises = []
-        context.state.cartList[0].cartInfoList.forEach((item) => {
+        context.state.CartList[0].cartInfoList.forEach((item) => {
             let promise = context.dispatch('UpdateCheck', {skuId: item.skuId, isChecked: value})
             promises.push(promise)
         })

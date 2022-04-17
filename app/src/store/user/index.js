@@ -1,10 +1,11 @@
 //state 存储数据的地方
-import {reqGetRegisterCode, reqLoginUser, reqRegisterUser, reqUserInfo, reqUserRegister,} from "@/api";
-import {setToken} from "@/utils/token";
+import {reqGetRegisterCode, reqLoginUser, reqRegisterUser, reqUserInfo, reqUserLogout, reqUserRegister,} from "@/api";
+import {getToken, removeToken, setToken} from "@/utils/token";
 
 const state = {
     code:"",
-    token:"",
+    //持久化存储token
+    token:getToken(),
     userData:{}
 };
 
@@ -18,6 +19,12 @@ const mutations = {
     },
     GETUSERINFO(state,value){
         state.userData = value
+    },
+    //清除本地数据
+    CLEARALL(state){
+        state.token = "";
+        state.userData = "";
+        removeToken();
     }
 
 };
@@ -57,6 +64,13 @@ const actions = {
         if(result.code == 200){
             commit('GETUSERINFO',result.data)
 
+            return "ok"
+        }else return Promise.reject(new Error("faile"));
+    },
+    async UserLogOut({commit}){
+        let result = await reqUserLogout()
+        if(result.code == 200){
+            commit('CLEARALL')
             return "ok"
         }else return Promise.reject(new Error("faile"));
     }

@@ -13,7 +13,7 @@
           <p v-else>
             <span>欢迎您！用户</span>
             <a>{{userName}}</a>
-            <a class="register">退出登录</a>
+            <a class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -62,6 +62,17 @@ export default {
     },
     clearKeyword(){
       this.keyword = ""
+    },
+    async logout(){
+      try {
+        await  this.$store.dispatch('UserLogOut')
+        this.$router.push({
+          path:"/home"
+        })
+      }catch (e) {
+
+      }
+
     }
 
 

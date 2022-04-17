@@ -67,3 +67,9 @@ export const reqUserInfo = ()=>requests({
     url:'/user/passport/auth/getUserInfo',
     method:'get'
 })
+
+//获取用户退出的接口 /api/user/passport/logout
+export const reqUserLogout = ()=>requests({
+    url:'/user/passport/logout',
+    method:'get'
+})
