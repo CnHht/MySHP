@@ -2,6 +2,8 @@
 import Vue from 'vue';
 import VueRouter from "vue-router";
 import routes from "@/router/routes";
+import store from "@/store"
+import {removeToken} from "@/utils/token";
 Vue.use(VueRouter);
 //备份VueRouter的push方法
 const originPush = VueRouter.prototype.push;
@@ -24,7 +26,7 @@ VueRouter.prototype.replace = ( function (location,resolve,reject) {
         originReplace.call(this,location,()=>{},()=>{})
     }
 })
-export default new VueRouter({
+let router =  new VueRouter({
     //配置路由
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -32,3 +34,34 @@ export default new VueRouter({
         return { y: 0 }
     },
 })
+router.beforeEach(async (to, from, next)=>{
+
+    next()
+    let token = store.state.user.token
+    let userInfo = store.state.user.userData
+    if(token ){
+        if(to.path == '/login'){
+            next('/')
+        }
+        else {
+            if(userInfo.id){
+                next()
+            }else {
+                //即每次刷新页面重新请求服务器
+                //没有用户信息，重新向发请求 //async放在最近的函数
+                try {
+                   await store.dispatch('userInfo')
+                }catch (e) {
+                    //拉取用户信息失败，token失效了
+                    alert('用户身份信息过期，请重新登录！')
+                    await store.dispatch('UserLogOut')
+                    next('/login')
+                }
+
+            }
+        }
+    }else {
+        next()
+    }
+})
+export  default  router
