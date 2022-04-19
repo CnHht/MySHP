@@ -85,7 +85,6 @@ export default {
   mounted() {
     //
     this.$bus.$on('clear',this.clearKeyword)
-    console.log('清除keyword')
   },
   computed:{
     userName(){

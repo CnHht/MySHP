@@ -6,7 +6,8 @@ const state = {
     code:"",
     //持久化存储token
     token:getToken(),
-    userData:{}
+    userData:{},
+    userName:""
 };
 
 //mutations 修改state的唯一手段
@@ -23,8 +24,11 @@ const mutations = {
     //清除本地数据
     CLEARALL(state){
         state.token = "";
-        state.userData = "";
+        state.userData = {};
         removeToken();
+    },
+    GETUSERNAME(state){
+        state.userName = state.userData.name
     }
 
 };
@@ -63,6 +67,7 @@ const actions = {
         let result = await reqUserInfo()
         if(result.code == 200){
             commit('GETUSERINFO',result.data)
+            commit('GETUSERNAME')
             return "ok"
         }else return Promise.reject(new Error("faile"));
     },

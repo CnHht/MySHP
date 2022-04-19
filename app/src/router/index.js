@@ -35,22 +35,22 @@ let router =  new VueRouter({
     },
 })
 router.beforeEach(async (to, from, next)=>{
-
-    next()
     let token = store.state.user.token
-    let userInfo = store.state.user.userData
+    let userInfo = store.state.user.userName
+    console.log(userInfo)
     if(token ){
         if(to.path == '/login'){
             next('/')
         }
         else {
-            if(userInfo.id){
+            if(userInfo){
                 next()
             }else {
                 //即每次刷新页面重新请求服务器
                 //没有用户信息，重新向发请求 //async放在最近的函数
                 try {
                    await store.dispatch('userInfo')
+                    next()
                 }catch (e) {
                     //拉取用户信息失败，token失效了
                     alert('用户身份信息过期，请重新登录！')
