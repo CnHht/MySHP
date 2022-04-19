@@ -1,6 +1,5 @@
 //state 存储数据的地方
 import {reqCheckCart, reqDelShopCart, reqGetShopCartList} from "@/api";
-import it from "element-ui/src/locale/lang/it";
 
 const state = {
     CartList: {},

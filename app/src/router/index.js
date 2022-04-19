@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next)=>{
     let userInfo = store.state.user.userName
     console.log(userInfo)
     if(token ){
-        if(to.path == '/login'){
+        if(to.path == '/login' || to.path == '/register'){
             next('/')
         }
         else {

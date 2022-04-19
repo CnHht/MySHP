@@ -6,7 +6,21 @@ import AddCartSuccess from "@/pages/AddCartSuccess"
 import ShopCart from "@/pages/ShopCart"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
+import Trade from "@/pages/Trade"
+import Pay from "@/pages/Pay"
 export default [
+    {
+        name: 'pay',  // 是当前路由的标识名称
+        path: '/pay',
+        component: Pay,
+        meta:{isShowFooter:true},
+    },
+    {
+        name: 'trade',  // 是当前路由的标识名称
+        path: '/trade',
+        component: Trade,
+        meta:{isShowFooter:true},
+    },
     {
         name: 'login',  // 是当前路由的标识名称
         path: '/login',
