@@ -8,8 +8,39 @@ import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Trade from "@/pages/Trade"
 import Pay from "@/pages/Pay"
-
+import PaySuccess from "@/pages/PaySuccess"
+import Center from "@/pages/Center"
+import myOrder from "@/pages/Center/myOrder"
+import groupOrder from "@/pages/Center/groupOrder"
 export default [
+    {
+        name: 'center',  // 是当前路由的标识名称
+        path: '/center',
+        component: Center,
+        //二级路由组件
+        meta: {isShowFooter: true},
+        children:[
+            {
+                path:'myorder',
+                component:myOrder
+            },
+            {
+                path:'grouporder',
+                component:groupOrder
+            },
+            //重定向到myorder
+            {
+                    path: '/center',
+                    redirect:'/center/myorder'
+            }
+        ]
+    },
+    {
+        name: 'paysuccess',  // 是当前路由的标识名称
+        path: '/paysuccess',
+        component: PaySuccess,
+        meta: {isShowFooter: true},
+    },
     {
         name: 'pay',  // 是当前路由的标识名称
         path: '/pay',

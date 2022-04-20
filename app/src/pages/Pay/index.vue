@@ -65,7 +65,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="open"> 立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -82,10 +82,14 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 export default {
   name: 'Pay',
   data(){
     return{
+      timer:null,
+      //支付状态码
+      code:""
     }
   },
   computed:{
@@ -98,7 +102,67 @@ export default {
 
   },
   methods:{
+    //弹出框
+    async open() {
+      //生成二维码
+      let url = await QRCode.toDataURL('weixin://wxpay/bizpayurl?pr=NxQXHJOzz')
+      this.$alert(`<img src=${url}>`, '微信支付(由于后台服务器原因，等待5s自动跳转)', {
+        dangerouslyUseHTMLString: true,
+        //居中
+        center:true,
+        // 显示取消确定按钮
+        showCancelButton:true,
+        showConfirmButton:true,
+        cancelButtonText:'支付遇见问题',
+        confirmButtonText:'支付成功',
+        showClose:false,
+        //查看res.code是否为200，是200（支付成功）跳转
+        beforeClose:(action, instance, done)=>{
+          // action区分点击了确定或者取消
+          //instance 当前组件实例
+          //done 关闭弹出框的方法
+            if(action == 'cancel'){
+                this.$message({
+                  showClose: true,
+                  message: '支付失败，请联系管理员',
+                  type: 'error'
+                })
+              //清除定时器  --
+              clearInterval(this.timer)
+              this.timer = null
+            }else {
+              //真实开发中必须判断this.code==200
+              //详细查看尚硅谷p100-101 -尚品汇Vue实战
+              this.$message({
+                showClose: true,
+                message: '支付成功！',
+                type: 'success'
+              });
+              //判断后台返回的code是否等于200
+              //清除定时器  --
+              clearInterval(this.timer)
+              this.timer = null
+              this.$router.push('/paysuccess')
+              done()
+            }
 
+        }
+      });
+      if(!this.timer){
+        //定时器的作用是不断向服务器发请求
+        this.timer = setInterval(async ()=>{
+            let res =  await this.$API.reqPayStatus(123113)
+            //假如 res.code == 200
+          //清除定时器  --
+            clearInterval(this.timer)
+            this.timer = null
+          //记录当前返回的请求码
+          this.code = res.code
+          this.$msgbox.close()
+          this.$router.push('/paysuccess')
+        },5000)
+      }
+    }
   },
 
 }

@@ -95,3 +95,15 @@ export const reqSubmitOrder = (tradeNo, data) => requests({
     data,
     method: 'post'
 })
+
+//获取订单详细信息 /api/payment/weixin/queryPayStatus/{orderId}
+export const reqPayStatus = (orderId) => requests({
+    url: `/payment/weixin/queryPayStatus/${orderId}`,
+    method: 'get'
+})
+
+//获取我的订单列表 /api/order/auth/{page}/{limit}
+export const reqCenterOrder = (page, limit) => requests({
+    url: `/order/auth/${page}/${limit}`,
+    method: 'get'
+})
