@@ -33,7 +33,7 @@
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked="" />
+                  <input name="m1" type="checkbox" value="2" checked=""/>
                   自动登录
                 </label>
                 <span class="forget">忘记密码？</span>
@@ -45,13 +45,14 @@
 
             <div class="call clearFix">
               <ul>
-                <li><img src="./images/qq.png" alt="" /></li>
-                <li><img src="./images/sina.png" alt="" /></li>
-                <li><img src="./images/ali.png" alt="" /></li>
-                <li><img src="./images/weixin.png" alt="" /></li>
+                <li><img src="./images/qq.png" alt=""/></li>
+                <li><img src="./images/sina.png" alt=""/></li>
+                <li><img src="./images/ali.png" alt=""/></li>
+                <li><img src="./images/weixin.png" alt=""/></li>
               </ul>
               <router-link class="register" to="/register"
-              >立即注册</router-link
+              >立即注册
+              </router-link
               >
             </div>
           </div>
@@ -73,14 +74,14 @@ export default {
   },
   methods: {
     //登录的回调函数
-    async userlogin(){
+    async userlogin() {
       try {
-        const {phone,password} = this
-        phone && password && await this.$store.dispatch('UserLogin',{phone,password})
+        const {phone, password} = this
+        phone && password && await this.$store.dispatch('UserLogin', {phone, password})
         this.$router.push({
-          path:'/home'
+          path: '/home'
         })
-      }catch (e) {
+      } catch (e) {
         console.log(e.message)
       }
     }

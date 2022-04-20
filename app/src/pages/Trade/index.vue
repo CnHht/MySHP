@@ -5,18 +5,20 @@
     <div class="content">
       <h5 class="receive">收件人信息</h5>
       <div class="address clearFix" v-for="(address,index) in addressInfo">
-        <span class="username " :class="{selected: address.isDefault == 1}" >{{address.consignee}}</span>
+        <span class="username " :class="{selected: address.isDefault == 1}">{{ address.consignee }}</span>
         <p @click="changeDefault(address)">
-          <span class="s1">{{address.fullAddress}}</span>
-          <span class="s2">{{address.phoneNum}}</span>
+          <span class="s1">{{ address.fullAddress }}</span>
+          <span class="s2">{{ address.phoneNum }}</span>
           <span class="s3" v-show="address.isDefault == 1">默认地址</span>
         </p>
       </div>
       <div class="line"></div>
       <h5 class="pay">支付方式</h5>
       <div class="address clearFix">
-        <span class="username selected">在线支付</span>
-        <span class="username" style="margin-left:5px;">货到付款</span>
+        <span class="username " @click="changePayWay('ONLINE')" :class="{selected:payway == 'ONLINE'}">在线支付</span>
+        <span class="username" style="margin-left:5px;" @click="changePayWay('UNLINE')"
+              :class="{selected:payway == 'UNLINE'}"
+        >货到付款</span>
 
       </div>
       <div class="line"></div>
@@ -35,13 +37,13 @@
             <img :src="order.imgUrl" alt="" style="width: 100px;height: 100px">
           </li>
           <li>
-            <p>{{order.skuName}}</p>
+            <p>{{ order.skuName }}</p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥{{order.orderPrice}}.00</h3>
+            <h3>￥{{ order.orderPrice }}.00</h3>
           </li>
-          <li>X{{order.skuNum}}</li>
+          <li>X{{ order.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -60,12 +62,12 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>{{orderInfo.totalNum}}</i>件商品，总商品金额</b>
-          <span>¥{{orderInfo.totalAmount}}.00</span>
+          <b><i>{{ orderInfo.totalNum }}</i>件商品，总商品金额</b>
+          <span>¥{{ orderInfo.totalAmount }}.00</span>
         </li>
         <li>
           <b>返现：</b>
-          <span>{{orderInfo.activityReduceAmount}}.00</span>
+          <span>{{ orderInfo.activityReduceAmount }}.00</span>
         </li>
         <li>
           <b>运费：</b>
@@ -74,16 +76,16 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">应付金额:　<span>¥{{ orderInfo.totalAmount }}.00</span></div>
       <div class="receiveInfo">
         寄送至:
-        <span>{{userAddress.fullAddress }}</span>
-        收货人：<span >{{userAddress.consignee}}</span>
-        <span>{{userAddress.phoneNum}}</span>
+        <span>{{ userAddress.fullAddress }}</span>
+        收货人：<span>{{ userAddress.consignee }}</span>
+        <span>{{ userAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
-      <a href="##" class="subBtn">提交订单</a>
+      <a href="##" class="subBtn" @click="subOrder" >提交订单</a>
 
     </div>
   </div>
@@ -91,32 +93,68 @@
 
 <script>
 import {mapState} from 'vuex'
+
 export default {
   name: "Trade",
-  data(){
-    return{
-      message:''
+  data() {
+    return {
+      message: '',
+      payway:''
     }
   },
   mounted() {
     this.$store.dispatch('GetUserAddress')
     this.$store.dispatch('GetOrderInfo')
   },
-  computed:{
+  computed: {
     ...mapState({
-      addressInfo:state => state.trade.addressInfo,
-      orderInfo:state => state.trade.orderInfo
+      addressInfo: state => state.trade.addressInfo,
+      orderInfo: state => state.trade.orderInfo
     }),
-    userAddress(){
-      return this.addressInfo.find(item=> item.isDefault == 1) || {}
+    userAddress() {
+      return this.addressInfo.find(item => item.isDefault == 1) || {}
     }
   },
-  methods:{
-    changeDefault(address){
-      this.addressInfo.forEach((item)=>{
-          item.isDefault = 0
+  methods: {
+    changeDefault(address) {
+      this.addressInfo.forEach((item) => {
+        item.isDefault = 0
       })
       address.isDefault = 1
+    },
+    async subOrder(){
+
+      let {tradeNO} = this.orderInfo
+      let data = {
+        consignee:this.userAddress.consignee,
+        consigneeTel:this.userAddress.phoneNum,
+        deliveryAddress:this.userAddress.fullAddress,
+        paymentWay:this.payway,
+        orderComment:this.message,
+        orderDetailList:this.orderInfo.detailArrayList
+      }
+      console.log(tradeNO)
+      console.log(data)
+
+      let result =  await this.$API.reqSubmitOrder(tradeNO,data)
+      console.log(result)
+      if( result.message = '不能重复提交订单！' || result.code == 200 ){
+        let orderId = result.data || 12345
+         this.$router.push({
+           path:'/pay',
+           query:{
+             orderId:orderId,
+             total:this.orderInfo.totalAmount
+           }
+         } )
+
+        console.log(this.orderInfo.totalAmount)
+      }else {
+        alert(result.data)
+      }
+    },
+    changePayWay(type){
+      this.payway = type
     }
   }
 
@@ -125,36 +163,41 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.title{
-  width:1200px;
+.title {
+  width: 1200px;
   margin: 0 auto;
   font-size: 14px;
   line-height: 21px;
 }
-.content{
+
+.content {
   width: 1200px;
   margin: 10px auto 0;
-  border:1px solid rgb(221, 221, 221);
+  border: 1px solid rgb(221, 221, 221);
   padding: 25px;
   box-sizing: border-box;
-  .receive,.pay{
+
+  .receive, .pay {
     line-height: 36px;
-    margin:18px 0;
+    margin: 18px 0;
   }
-  .address{
+
+  .address {
     padding-left: 20px;
     margin-bottom: 15px;
-    .username{
-      float:left;
+
+    .username {
+      float: left;
       width: 100px;
       height: 30px;
       line-height: 30px;
       text-align: center;
-      border:1px solid #ddd;
+      border: 1px solid #ddd;
       position: relative;
     }
-    .username::after{
-      content:"";
+
+    .username::after {
+      content: "";
       display: none;
       width: 13px;
       height: 13px;
@@ -163,31 +206,37 @@ export default {
       bottom: 0;
       background: url(./images/choosed.png) no-repeat;
     }
-    .username.selected{
-      border-color:#e1251b;
+
+    .username.selected {
+      border-color: #e1251b;
     }
-    .username.selected::after{
+
+    .username.selected::after {
       display: block;
     }
-    p{
-      width:610px;
-      float:left;
+
+    p {
+      width: 610px;
+      float: left;
       line-height: 30px;
       margin-left: 10px;
       padding-left: 5px;
       cursor: pointer;
-      .s1{
-        float:left;
+
+      .s1 {
+        float: left;
 
       }
-      .s2{
-        float:left;
+
+      .s2 {
+        float: left;
         margin: 0 5px;
       }
-      .s3{
-        float:left;
-        width:56px;
-        height:24px;
+
+      .s3 {
+        float: left;
+        width: 56px;
+        height: 24px;
         line-height: 24px;
         margin-left: 10px;
         background-color: #878787;
@@ -196,27 +245,33 @@ export default {
         text-align: center;
       }
     }
-    p:hover{
-      background-color:  #ddd;
+
+    p:hover {
+      background-color: #ddd;
     }
   }
-  .line{
+
+  .line {
     height: 1px;
     background-color: #ddd;
   }
-  .way{
+
+  .way {
     width: 1080px;
     height: 110px;
     background: #f4f4f4;
-    padding:15px;
+    padding: 15px;
     margin: 0 auto;
-    h5{
+
+    h5 {
       line-height: 50px;
     }
-    .info{
+
+    .info {
       margin-top: 20px;
-      .s1{
-        float:left;
+
+      .s1 {
+        float: left;
         border: 1px solid #ddd;
         width: 120px;
         height: 30px;
@@ -224,46 +279,57 @@ export default {
         text-align: center;
         margin-right: 10px;
       }
-      p{
+
+      p {
         line-height: 30px;
       }
     }
   }
-  .detail{
+
+  .detail {
     width: 1080px;
 
     background: #feedef;
-    padding:15px;
+    padding: 15px;
     margin: 2px auto 0;
-    h5{
+
+    h5 {
       line-height: 50px;
     }
-    .list{
+
+    .list {
       display: flex;
       justify-content: space-between;
-      li{
+
+      li {
         line-height: 30px;
-        p{
+
+        p {
 
           margin-bottom: 20px;
         }
-        h4{
-          color:#c81623;
+
+        h4 {
+          color: #c81623;
           font-weight: 400;
         }
-        h3{
+
+        h3 {
 
           color: #e12228;
         }
       }
     }
   }
-  .bbs{
+
+  .bbs {
     margin-bottom: 15px;
-    h5{
+
+    h5 {
       line-height: 50px;
     }
-    textarea{
+
+    textarea {
       width: 100%;
       border-color: #e4e2e2;
       line-height: 1.8;
@@ -271,32 +337,39 @@ export default {
       resize: none;
     }
   }
-  .bill{
-    h5{
+
+  .bill {
+    h5 {
       line-height: 50px;
     }
-    div{
+
+    div {
       padding-left: 15px;
     }
   }
 }
-.money{
+
+.money {
   width: 1200px;
   margin: 20px auto;
-  ul{
+
+  ul {
     width: 220px;
-    float:right;
-    li{
+    float: right;
+
+    li {
       line-height: 30px;
       display: flex;
       justify-content: space-between;
-      i{
-        color:red;
+
+      i {
+        color: red;
       }
     }
   }
 }
-.trade{
+
+.trade {
   box-sizing: border-box;
   width: 1200px;
   padding: 10px;
@@ -304,29 +377,34 @@ export default {
   text-align: right;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
-  div{
+
+  div {
     line-height: 30px;
   }
-  .price span{
-    color:#e12228;
+
+  .price span {
+    color: #e12228;
     font-weight: 700;
     font-size: 14px;
   }
-  .receiveInfo{
-    color:#999;
+
+  .receiveInfo {
+    color: #999;
   }
 }
-.sub{
+
+.sub {
   width: 1200px;
   margin: 0 auto 10px;
-  .subBtn{
-    float:right;
-    width:164px;
+
+  .subBtn {
+    float: right;
+    width: 164px;
     height: 56px;
-    font:700 18px "微软雅黑";
+    font: 700 18px "微软雅黑";
     line-height: 56px;
     text-align: center;
-    color:#fff;
+    color: #fff;
     background-color: #e1251b;
 
   }

@@ -9,8 +9,9 @@ import detail from './detail'
 import shopCart from './shopCart'
 import user from './user'
 import trade from './mytrade/trade'
+
 export default new Vuex.Store({
-    modules:{
+    modules: {
         home,
         search,
         detail,
