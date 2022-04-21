@@ -1,17 +1,17 @@
-import Detail from "@/pages/Detail";
-import Home from "@/pages/Home";
-
-import Search from "@/pages/Search";
-import AddCartSuccess from "@/pages/AddCartSuccess"
-import ShopCart from "@/pages/ShopCart"
-import Login from "@/pages/Login"
-import Register from "@/pages/Register"
-import Trade from "@/pages/Trade"
+const Home = () => import('@/pages/Home')
+const Search = () => import('@/pages/Search')
+const Detail = () => import('@/pages/Detail')
+const AddCartSuccess = () => import('@/pages/AddCartSuccess')
+const ShopCart = () => import('@/pages/ShopCart')
+const Login = () => import('@/pages/Login')
+const Register = () => import('@/pages/Register')
+const Trade = () => import('@/pages/Trade')
 import Pay from "@/pages/Pay"
 import PaySuccess from "@/pages/PaySuccess"
 import Center from "@/pages/Center"
 import myOrder from "@/pages/Center/myOrder"
 import groupOrder from "@/pages/Center/groupOrder"
+//路由懒加载（按需求引入）
 export default [
     {
         name: 'center',  // 是当前路由的标识名称

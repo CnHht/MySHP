@@ -29,12 +29,13 @@ import '../src/mock/mockServe'
 import "swiper/css/swiper.css"
 
 //引入element样式组件库
-import {Input, Button, Icon, MessageBox, Message, Table, TableColumn} from 'element-ui';
+import {Input, Button, Icon, MessageBox, Message, Table, TableColumn,Alert} from 'element-ui';
 
 Vue.component(Input.name, Input);
 Vue.component(Button.name, Button);
 Vue.component(Icon.name, Icon);
 Vue.component(Table.name, Table);
+Vue.component(Alert.name, Alert);
 Vue.use(TableColumn)
 Vue.prototype.$message = Message;
 Vue.prototype.$msgbox = MessageBox;
@@ -44,10 +45,15 @@ Vue.prototype.$alert = MessageBox.alert;
 //使用图片懒加载vue插件
 import VueLazyload from 'vue-lazyload'
 import defaultImg from '@/assets/1.gif'
-Vue.use(VueLazyload,{
+
+Vue.use(VueLazyload, {
     //懒加载默认图片
-    loading:defaultImg
+    loading: defaultImg
 })
+
+
+//引入表单验证插件vee-validate
+import  '@/utils/validate/validate'
 new Vue({
     render: h => h(App),
     //注册路由组件
