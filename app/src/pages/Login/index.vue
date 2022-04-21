@@ -78,8 +78,10 @@ export default {
       try {
         const {phone, password} = this
         phone && password && await this.$store.dispatch('UserLogin', {phone, password})
+        console.log(this.$route.query.redirect)
+        let toPath = this.$route.query.redirect || "/home"
         this.$router.push({
-          path: '/home'
+          path: toPath
         })
       } catch (e) {
         console.log(e.message)

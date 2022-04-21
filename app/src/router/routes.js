@@ -40,18 +40,37 @@ export default [
         path: '/paysuccess',
         component: PaySuccess,
         meta: {isShowFooter: true},
+        beforeEnter: (to, from, next) => {
+            // 去交易页面必须从shopcart
+            if(from.path == '/pay'){
+                next()
+            }else next(false) //取消当前路由跳转
+        }
     },
     {
         name: 'pay',  // 是当前路由的标识名称
         path: '/pay',
         component: Pay,
         meta: {isShowFooter: true},
+        beforeEnter: (to, from, next) => {
+            // 去交易页面必须从shopcart
+            if(from.path == '/trade'){
+                next()
+            }else next(false) //取消当前路由跳转
+        }
     },
     {
         name: 'trade',  // 是当前路由的标识名称
         path: '/trade',
         component: Trade,
         meta: {isShowFooter: true},
+        //路由独享守卫
+        beforeEnter: (to, from, next) => {
+            // 去交易页面必须从shopcart
+            if(from.path == '/shopcart'){
+                next()
+            }else next(false) //取消当前路由跳转
+        }
     },
     {
         name: 'login',  // 是当前路由的标识名称
@@ -64,6 +83,7 @@ export default [
         path: '/register',
         component: Register,
         meta: {isShowFooter: true},
+
     },
     {
         name: 'shopcart',  // 是当前路由的标识名称

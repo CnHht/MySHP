@@ -39,6 +39,15 @@ Vue.use(TableColumn)
 Vue.prototype.$message = Message;
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
+
+
+//使用图片懒加载vue插件
+import VueLazyload from 'vue-lazyload'
+import defaultImg from '@/assets/1.gif'
+Vue.use(VueLazyload,{
+    //懒加载默认图片
+    loading:defaultImg
+})
 new Vue({
     render: h => h(App),
     //注册路由组件

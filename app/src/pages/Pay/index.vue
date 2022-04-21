@@ -8,7 +8,7 @@
         </h4>
         <div class="paymark">
           <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{orderId}}</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{total}}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{payInfo.totalFee}}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -85,11 +85,15 @@
 import QRCode from 'qrcode'
 export default {
   name: 'Pay',
+  mounted() {
+    this.getPayInfo();
+  },
   data(){
     return{
       timer:null,
       //支付状态码
-      code:""
+      code:"",
+      payInfo: {},
     }
   },
   computed:{
@@ -105,8 +109,8 @@ export default {
     //弹出框
     async open() {
       //生成二维码
-      let url = await QRCode.toDataURL('weixin://wxpay/bizpayurl?pr=NxQXHJOzz')
-      this.$alert(`<img src=${url}>`, '微信支付(由于后台服务器原因，等待5s自动跳转)', {
+      let url = await QRCode.toDataURL(this.payInfo.codeUrl)
+      this.$alert(`<img src=${url}>`, '微信支付', {
         dangerouslyUseHTMLString: true,
         //居中
         center:true,
@@ -130,6 +134,7 @@ export default {
               //清除定时器  --
               clearInterval(this.timer)
               this.timer = null
+              done()
             }else {
               //真实开发中必须判断this.code==200
               //详细查看尚硅谷p100-101 -尚品汇Vue实战
@@ -151,18 +156,30 @@ export default {
       if(!this.timer){
         //定时器的作用是不断向服务器发请求
         this.timer = setInterval(async ()=>{
-            let res =  await this.$API.reqPayStatus(123113)
-            //假如 res.code == 200
-          //清除定时器  --
-            clearInterval(this.timer)
-            this.timer = null
-          //记录当前返回的请求码
-          this.code = res.code
-          this.$msgbox.close()
-          this.$router.push('/paysuccess')
-        },5000)
+            let result =  await this.$API.reqPayStatus(this.orderId)
+          console.log(result)
+          //如果code==200
+          if (result.code == 200) {
+            //第一步：清除定时器
+            clearInterval(this.timer);
+            this.timer = null;
+            //保存支付成功返回的code
+            this.code = result.code;
+            //关闭弹出框
+            this.$msgbox.close();
+            //跳转到下一路由
+            this.$router.push("/paysuccess");
+          }
+        },1000)
       }
-    }
+    },
+    async getPayInfo() {
+      let result = await this.$API.reqPayInfo(this.orderId);
+      //如果成功：组件当中存储支付信息
+      if (result.code == 200) {
+        this.payInfo = result.data;
+      }
+    },
   },
 
 }

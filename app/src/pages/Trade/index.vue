@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <!-- 买卖 -->
+  <div class="trade-container">
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix" v-for="(address,index) in addressInfo">
-        <span class="username " :class="{selected: address.isDefault == 1}">{{ address.consignee }}</span>
-        <p @click="changeDefault(address)">
+      <div
+          class="address clearFix"
+          v-for="(address, index) in addressInfo"
+          :key="address.id"
+      >
+        <span class="username " :class="{ selected: address.isDefault == 1 }">{{
+            address.consignee
+          }}</span>
+        <p @click="changeDefault(address, addressInfo)">
           <span class="s1">{{ address.fullAddress }}</span>
           <span class="s2">{{ address.phoneNum }}</span>
           <span class="s3" v-show="address.isDefault == 1">默认地址</span>
@@ -17,9 +22,7 @@
       <div class="address clearFix">
         <span class="username " @click="changePayWay('ONLINE')" :class="{selected:payway == 'ONLINE'}">在线支付</span>
         <span class="username" style="margin-left:5px;" @click="changePayWay('UNLINE')"
-              :class="{selected:payway == 'UNLINE'}"
-        >货到付款</span>
-
+              :class="{selected:payway == 'UNLINE'}">货到付款</span>
       </div>
       <div class="line"></div>
       <h5 class="pay">送货清单</h5>
@@ -32,9 +35,13 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix" v-for="(order,index) in orderInfo.detailArrayList" :key="order.skuId">
+        <ul
+            class="list clearFix"
+            v-for="(order, index) in orderInfo.detailArrayList"
+            :key="order.skuId"
+        >
           <li>
-            <img :src="order.imgUrl" alt="" style="width: 100px;height: 100px">
+            <img :src="order.imgUrl" alt="" style="width:100px;height:100px" />
           </li>
           <li>
             <p>{{ order.skuName }}</p>
@@ -49,8 +56,11 @@
       </div>
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="message"></textarea>
-
+        <textarea
+            placeholder="建议留言前先与商家沟通确认"
+            class="remarks-cont"
+            v-model="msg"
+        ></textarea>
       </div>
       <div class="line"></div>
       <div class="bill">
@@ -62,12 +72,15 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>{{ orderInfo.totalNum }}</i>件商品，总商品金额</b>
+          <b
+          ><i>{{ orderInfo.totalNum }}</i
+          >件商品，总商品金额</b
+          >
           <span>¥{{ orderInfo.totalAmount }}.00</span>
         </li>
         <li>
           <b>返现：</b>
-          <span>{{ orderInfo.activityReduceAmount }}.00</span>
+          <span>0.00</span>
         </li>
         <li>
           <b>运费：</b>
@@ -76,17 +89,18 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥{{ orderInfo.totalAmount }}.00</span></div>
+      <div class="price">
+        应付金额: <span>¥{{ orderInfo.totalAmount }}.00</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
-        <span>{{ userAddress.fullAddress }}</span>
-        收货人：<span>{{ userAddress.consignee }}</span>
-        <span>{{ userAddress.phoneNum }}</span>
+        <span>{{ userDefaultAddress.fullAddress }}</span>
+        收货人：<span>{{ userDefaultAddress.consignee }}</span>
+        <span>{{ userDefaultAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
-      <a href="##" class="subBtn" @click="subOrder" >提交订单</a>
-
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -98,8 +112,9 @@ export default {
   name: "Trade",
   data() {
     return {
-      message: '',
-      payway:''
+      msg: '',
+      payway:'',
+      orderId: "",
     }
   },
   mounted() {
@@ -111,52 +126,46 @@ export default {
       addressInfo: state => state.trade.addressInfo,
       orderInfo: state => state.trade.orderInfo
     }),
-    userAddress() {
+    userDefaultAddress() {
       return this.addressInfo.find(item => item.isDefault == 1) || {}
     }
   },
   methods: {
-    changeDefault(address) {
-      this.addressInfo.forEach((item) => {
-        item.isDefault = 0
-      })
-      address.isDefault = 1
-    },
-    async subOrder(){
-
-      let {tradeNO} = this.orderInfo
-      let data = {
-        consignee:this.userAddress.consignee,
-        consigneeTel:this.userAddress.phoneNum,
-        deliveryAddress:this.userAddress.fullAddress,
-        paymentWay:this.payway,
-        orderComment:this.message,
-        orderDetailList:this.orderInfo.detailArrayList
-      }
-      console.log(tradeNO)
-      console.log(data)
-
-      let result =  await this.$API.reqSubmitOrder(tradeNO,data)
-      console.log(result)
-      if( result.message = '不能重复提交订单！' || result.code == 200 ){
-        let orderId = result.data || 12345
-         this.$router.push({
-           path:'/pay',
-           query:{
-             orderId:orderId,
-             total:this.orderInfo.totalAmount
-           }
-         } )
-
-        console.log(this.orderInfo.totalAmount)
-      }else {
-        alert(result.data)
-      }
-    },
     changePayWay(type){
       this.payway = type
-    }
-  }
+    },
+    //修改默认地址
+    changeDefault(address, addressInfo) {
+      //全部的isDefault为零
+      addressInfo.forEach((item) => (item.isDefault = 0));
+      address.isDefault = 1;
+    },
+    //提交订单
+    async submitOrder() {
+      //交易编码
+      let { tradeNo } = this.orderInfo;
+      //其余的六个参数
+      let data = {
+        consignee: this.userDefaultAddress.consignee, //最终收件人的名字
+        consigneeTel: this.userDefaultAddress.phoneNum, //最终收件人的手机号
+        deliveryAddress: this.userDefaultAddress.fullAddress, //收件人的地址
+        paymentWay: "ONLINE", //支付方式
+        orderComment: this.msg, //买家的留言信息
+        orderDetailList: this.orderInfo.detailArrayList, //商品清单
+      };
+      //需要带参数的：tradeNo
+      let result = await this.$API.reqSubmitOrder(tradeNo, data);
+      //提交订单成功
+      if (result.code == 200) {
+        this.orderId = result.data;
+        //路由跳转 + 路由传递参数
+        this.$router.push('/pay?orderId='+this.orderId);
+        //提交的订单失败
+      } else {
+        alert(result.data);
+      }
+    },
+  },
 
 
 }

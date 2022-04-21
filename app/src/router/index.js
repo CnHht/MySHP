@@ -65,7 +65,14 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     } else {
-        next()
+        //用户未登录情况
+        let topath = to.path
+        //通过indexOf判断路径中是否包含不可去的页面，与直接用==相比效率更高
+        if( topath.indexOf('/trade')!=-1 || topath.indexOf('/pay')!=-1 || topath.indexOf('/center')!=-1){
+            //登录成功后跳转到未登录之前的页面
+            //修改login组件的push
+            next('/login?redirect=' + topath)
+        }else next()
     }
 })
 export default router
