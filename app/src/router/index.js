@@ -71,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
         if( topath.indexOf('/trade')!=-1 || topath.indexOf('/pay')!=-1 || topath.indexOf('/center')!=-1){
             //登录成功后跳转到未登录之前的页面
             //修改login组件的push
-            next('/login?redirect=' + topath)
+            next('/login');
         }else next()
     }
 })
