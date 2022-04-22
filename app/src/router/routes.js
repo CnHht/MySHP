@@ -6,6 +6,8 @@ const ShopCart = () => import('@/pages/ShopCart')
 const Login = () => import('@/pages/Login')
 const Register = () => import('@/pages/Register')
 const Trade = () => import('@/pages/Trade')
+
+
 import Pay from "@/pages/Pay"
 import PaySuccess from "@/pages/PaySuccess"
 import Center from "@/pages/Center"
