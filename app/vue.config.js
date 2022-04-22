@@ -1,6 +1,6 @@
 module.exports = {
     lintOnSave:false,
-
+    productionSourceMap:false,
     //解决跨域问题：代理服务器配置
     devServer: {
         proxy: {
